@@ -97,11 +97,14 @@ namespace Libro_de_Cuentas.Data.Repositories
                 connection.Open();
                 string query = "DELETE FROM Movimiento WHERE Id = @id";
                 using (var cmd = new SQLiteCommand(query, connection))
-                {
-                    cmd.Parameters.AddWithValue("@id", id);
-                    cmd.ExecuteNonQuery();
-                }
+            {
+                conn.Open();
+                var cmd = conn.CreateCommand();
+                cmd.CommandText = "DELETE FROM Movimiento WHERE Id = @id";
+                cmd.Parameters.AddWithValue("@id", id);
+                cmd.ExecuteNonQuery();
             }
+        }
         }
 
         public void ActualizarMovimiento(Movimiento movimiento)
@@ -111,18 +114,18 @@ namespace Libro_de_Cuentas.Data.Repositories
                 connection.Open();
                 string query = @"
                     UPDATE Movimiento
-                    SET Tipo = @tipo, Monto = @monto, Fecha = @fecha
-                    WHERE Id = @id";
+                                    SET Tipo = @tipo, Monto = @monto, Fecha = @fecha
+                                    WHERE Id = @id";
 
                 using (var cmd = new SQLiteCommand(query, connection))
                 {
-                    cmd.Parameters.AddWithValue("@tipo", movimiento.Tipo);
-                    cmd.Parameters.AddWithValue("@monto", movimiento.Monto);
-                    cmd.Parameters.AddWithValue("@fecha", movimiento.Fecha);
-                    cmd.Parameters.AddWithValue("@id", movimiento.Id);
-                    cmd.ExecuteNonQuery();
-                }
+                cmd.Parameters.AddWithValue("@tipo", movimiento.Tipo);
+                cmd.Parameters.AddWithValue("@monto", movimiento.Monto);
+                cmd.Parameters.AddWithValue("@fecha", movimiento.Fecha);
+                cmd.Parameters.AddWithValue("@id", movimiento.Id);
+                cmd.ExecuteNonQuery();
             }
         }
     }
+}
 }

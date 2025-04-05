@@ -32,7 +32,7 @@ namespace Libro_de_Cuentas
             
             try
             {
-                nudMonto.Value = movimiento.Monto;
+            nudMonto.Value = movimiento.Monto;
             }
             catch (ArgumentOutOfRangeException)
             {

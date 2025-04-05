@@ -1,4 +1,5 @@
-﻿using System.Data.SQLite;
+﻿using System;
+using System.Data.SQLite;
 using System.IO;
 
 namespace Libro_de_Cuentas.Data
@@ -39,12 +40,14 @@ namespace Libro_de_Cuentas.Data
                 using (var cmd = new SQLiteCommand(createPersonaTable, connection))
                 {
                     cmd.ExecuteNonQuery();
-                }               
+                }
 
                 using (var cmd = new SQLiteCommand(createMovimientoTable, connection))
                 {
                     cmd.ExecuteNonQuery();
                 }
+
+                connection.Close();
             }
         }
     }

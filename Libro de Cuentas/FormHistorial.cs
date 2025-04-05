@@ -2,9 +2,9 @@
 using System.Windows.Forms;
 using Libro_de_Cuentas.Models;
 using Libro_de_Cuentas.Data.Repositories;
+using System.Linq;
 using System.IO;
 using System.Text;
-using System.Linq;
 
 namespace Libro_de_Cuentas
 {
@@ -55,6 +55,7 @@ namespace Libro_de_Cuentas
             if (dgvMovimientos.CurrentRow?.DataBoundItem is Movimiento mov)
             {
                 var result = MessageBox.Show("¿Seguro que querés eliminar este movimiento?", "Confirmar", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+
                 if (result == DialogResult.Yes)
                 {
                     repo.EliminarMovimiento(mov.Id);
@@ -76,10 +77,11 @@ namespace Libro_de_Cuentas
                     if (formEditar.ShowDialog() == DialogResult.OK)
                     {
                         // Actualizar el movimiento en la base de datos
-                        repo.ActualizarMovimiento(formEditar.MovimientoEditado);
-                        CargarHistorial();
-                    }
+                    repo.ActualizarMovimiento(formEditar.MovimientoEditado);
+                    CargarHistorial();
+                    MessageBox.Show("Movimiento actualizado");
                 }
+            }
             }
             else
             {
@@ -114,16 +116,16 @@ namespace Libro_de_Cuentas
         private void btnExportarCSV_Click(object sender, EventArgs e)
         {
             if (dgvMovimientos.DataSource != null)
-            {
+                    {
                 var movimientos = (dgvMovimientos.DataSource as System.Collections.IEnumerable).Cast<Movimiento>().ToList();
                 var sfd = new SaveFileDialog
-                {
+                        {
                     Filter = "CSV files (*.csv)|*.csv",
                     FileName = $"Historial_{_persona.Nombre}.csv"
                 };
 
                 if (sfd.ShowDialog() == DialogResult.OK)
-                {
+                                {
                     var sb = new StringBuilder();
                     sb.AppendLine("Id,Tipo,Monto,Fecha");
                     foreach (var mov in movimientos)
